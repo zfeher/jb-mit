@@ -16,23 +16,50 @@
       :selectedValue="destination"
       :disabled="destDisabled"
     />
+
+    <DatePicker
+      id="departureDate"
+      @select="handleDepartureDateSelect($event)"
+      :min="minDepartureDate"
+      :max="maxDepartureDate"
+      :selected="departureDate"
+    />
+
+    <DatePicker
+      id="returnDate"
+      @select="handleReturnDateSelect($event)"
+      :min="minReturnDate"
+      :max="maxReturnDate"
+      :selected="returnDate"
+    />
   </div>
 </template>
 
 <script>
-import { ComboBox } from './components';
+import * as R from 'Ramda';
+import { ComboBox, DatePicker } from './components';
+import { dateStrGt, todayDateStr } from './common';
+
+let MAX_DATE = '2018-12-31';
+let today = todayDateStr();
 
 export default {
   name: 'App',
 
   components: {
     ComboBox,
+    DatePicker,
   },
 
   data() {
     return {
       origin: '',
       destination: '',
+      departureDate: today,
+      minDepartureDate: today,
+      maxDepartureDate: MAX_DATE,
+      returnDate: '',
+      maxReturnDate: MAX_DATE,
     };
   },
 
@@ -74,6 +101,11 @@ export default {
     destDisabled() {
       return !this.origin;
     },
+
+    minReturnDate() {
+      let departureDate = this.departureDate;
+      return departureDate ? departureDate : MAX_DATE;
+    },
   },
 
   methods: {
@@ -84,6 +116,18 @@ export default {
 
     handleDestinationSelect(selected) {
       this.destination = selected;
+    },
+
+    handleDepartureDateSelect(selected) {
+      this.departureDate = selected;
+
+      if (dateStrGt(this.departureDate, this.returnDate)) {
+        this.returnDate = '';
+      }
+    },
+
+    handleReturnDateSelect(selected) {
+      this.returnDate = selected;
     },
   },
 };
