@@ -32,12 +32,33 @@
       :max="maxReturnDate"
       :selected="returnDate"
     />
+
+    <ListBox
+      id="departureFlight"
+      @select="handleDepFlightSelect($event)"
+      label="Departure Flights"
+      :options="depFlightOptions"
+      :selectedValue="departureFlight"
+    />
+
+    <ListBox
+      id="returnFlight"
+      @select="handleRetFlightSelect($event)"
+      label="Return Flights"
+      :options="retFlightOptions"
+      :selectedValue="returnFlight"
+    />
+
+
+
+
+
   </div>
 </template>
 
 <script>
 import * as R from 'Ramda';
-import { ComboBox, DatePicker } from './components';
+import { ComboBox, DatePicker, ListBox } from './components';
 import { dateStrGt, todayDateStr } from './common';
 
 let MAX_DATE = '2018-12-31';
@@ -49,6 +70,7 @@ export default {
   components: {
     ComboBox,
     DatePicker,
+    ListBox,
   },
 
   data() {
@@ -60,6 +82,8 @@ export default {
       maxDepartureDate: MAX_DATE,
       returnDate: '',
       maxReturnDate: MAX_DATE,
+      departureFlight: '',
+      returnFlight: '',
     };
   },
 
@@ -106,6 +130,26 @@ export default {
       let departureDate = this.departureDate;
       return departureDate ? departureDate : MAX_DATE;
     },
+
+    depFlightOptions() {
+      return [{
+        text: 'dep1',
+        value: 'dep1',
+      }, {
+        text: 'dep2',
+        value: 'dep2',
+      }];
+    },
+
+    retFlightOptions() {
+      return [{
+        text: 'ret1',
+        value: 'ret1',
+      }, {
+        text: 'ret2',
+        value: 'ret2',
+      }];
+    },
   },
 
   methods: {
@@ -128,6 +172,14 @@ export default {
 
     handleReturnDateSelect(selected) {
       this.returnDate = selected;
+    },
+
+    handleDepFlightSelect(selected) {
+      this.departureFlight = selected;
+    },
+
+    handleRetFlightSelect(selected) {
+      this.returnFlight = selected;
     },
   },
 };
