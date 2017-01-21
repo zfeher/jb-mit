@@ -33,6 +33,8 @@
       :selected="returnDate"
     />
 
+    <button @click="handleSearchClick">Search</button>
+
     <ListBox
       id="departureFlight"
       @select="handleDepFlightSelect($event)"
@@ -181,6 +183,17 @@ export default {
     handleRetFlightSelect(selected) {
       this.returnFlight = selected;
     },
+
+    handleSearchClick() {
+      console.log('search in progress ...');
+
+      // TODO validate
+      // TODO get/fill in depFlightOptions
+      // TODO get/fill in retFlightOptions, if return date set
+      // TODO show a date picker for return fligth pick, if return date not set
+      // TODO get/fill/show retFlightOptions if return date set afterwards
+
+    }
   },
 };
 </script>
