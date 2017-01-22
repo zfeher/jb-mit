@@ -13,6 +13,8 @@
 
 <script>
 export default {
+  name: 'DatePicker',
+
   props: {
     id: {
       type: String,
