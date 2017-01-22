@@ -1,5 +1,9 @@
 <template>
-  <select :id="id" @change="handleChange($event)" :disabled="disabled" >
+  <select
+      :id="id"
+      @change="handleChange($event)"
+      :disabled="disabled"
+      :style="{ width }" >
     <option
         v-for="option in options"
         :value="option.value"
@@ -17,6 +21,11 @@ export default {
     id: {
       type: String,
       required: true,
+    },
+
+    width: {
+      type: String,
+      default: '200px',
     },
 
     disabled: {
