@@ -22,7 +22,7 @@ export default {
 
     width: {
       type: String,
-      default: '123px',
+      default: '125px',
     },
 
     selected: String,
