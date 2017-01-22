@@ -2,7 +2,7 @@
   <div :id="id" >
     <Labell text="Departure Flights" />
     <ListBox
-      id="departureFlight"
+      id="departure-flight"
       @select="handleDepFlightSelect($event)"
       :options="depFlightOptions"
       :selectedValue="departureFlight"
@@ -10,7 +10,7 @@
 
     <Labell text="Return Flights" />
     <ListBox
-      id="returnFlight"
+      id="return-flight"
       @select="handleRetFlightSelect($event)"
       :options="retFlightOptions"
       :selectedValue="returnFlight"

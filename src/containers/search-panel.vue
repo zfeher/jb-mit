@@ -19,7 +19,7 @@
 
     <Labell text="Departure Date" />
     <DatePicker
-      id="departureDate"
+      id="departure-date"
       @select="handleDepartureDateSelect($event)"
       :min="minDepartureDate"
       :max="maxDepartureDate"
@@ -28,7 +28,7 @@
 
     <Labell text="Return Date" />
     <DatePicker
-      id="returnDate"
+      id="return-date"
       @select="handleReturnDateSelect($event)"
       :min="minReturnDate"
       :max="maxReturnDate"
