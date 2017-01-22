@@ -1,4 +1,4 @@
-import * as R from 'Ramda';
+import * as R from 'ramda';
 
 let now = () => new Date();
 let dateToIsoString = date => date.toISOString();
@@ -14,20 +14,21 @@ export let todayDateStr = R.compose(
 );
 
 let strToDate = str => new Date(str);
-let dateToTimestamp = date => date.getTime();
-
-let dateGt = (date1, date2) => {
-  // TODO more ramda way?
-  return R.gt(
-    dateToTimestamp(date1),
-    dateToTimestamp(date2)
-  );
-};
 
 export let dateStrGt = (dateStr1, dateStr2) => {
   // TODO more ramda way?
-  return dateGt(
+  return R.gt(
     strToDate(dateStr1),
     strToDate(dateStr2)
   );
 };
+
+export let dateStrLt = (dateStr1, dateStr2) => {
+  // TODO more ramda way?
+  return R.lt(
+    strToDate(dateStr1),
+    strToDate(dateStr2)
+  );
+};
+
+export let isNotEmpty = R.complement(R.isEmpty);

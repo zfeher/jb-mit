@@ -40,7 +40,7 @@
       <DatePicker
         :id="returnDate.id"
         @select="handleReturnDateSelect($event)"
-        :min="minReturnDate"
+        :min="returnDateMin"
         :max="returnDate.max"
         :selected="returnDate.value"
       />
@@ -55,11 +55,57 @@
 </template>
 
 <script>
+import * as R from 'ramda';
 import { Labell, ComboBox, DatePicker, ErrorMessage } from '../components';
-import { dateStrGt, todayDateStr } from '../common';
+import { dateStrGt, dateStrLt, isNotEmpty, todayDateStr } from '../common';
+
+let __ = R.__;
 
 let MAX_DATE = '2018-12-31';
 let today = todayDateStr();
+
+let checkNotEmpty = R.curry(
+  (name, value) => R.isEmpty(value) ? `${name} should be set` : ''
+);
+
+let checkDateStrGte = R.curry(
+  (name, otherName, dateStr1, dateStr2) =>
+    dateStrLt(dateStr1, dateStr2) ?
+      `${name} should be >= ${otherName}` :
+      ''
+);
+
+let validate = R.curry(
+  (checkers, value) => {
+    return R.compose(
+      R.when(R.isNil, R.always('')),
+      R.find(isNotEmpty),
+      R.map(checker => checker(value)),
+    )(checkers);
+  }
+);
+
+let validateOrigin = validate([checkNotEmpty('origin')]);
+let validateDestination = validate([checkNotEmpty('destination')]);
+
+let validateDepartureDate = (today, value) =>
+  validate(
+    [
+      checkNotEmpty('departure date'),
+      checkDateStrGte('departure date', 'today', __, today)
+    ],
+    value,
+  );
+
+let validateReturnDate = (departureDate, today, value) =>
+  validate(
+    [
+      checkNotEmpty('return date'),
+      checkDateStrGte('return date', 'departure date', __, departureDate),
+      checkDateStrGte('return date', 'today', __, today)
+    ],
+    value,
+);
 
 export default {
   name: 'SearchPanel',
@@ -80,16 +126,18 @@ export default {
 
   data() {
     return {
+      citiesWithConnections: [],
+
       origin: {
         id: 'origin',
         value: '',
-        error: 'something is wrong',
+        error: '',
       },
 
       destination: {
         id: 'destination',
         value: '',
-        error: 'something is wrong',
+        error: '',
       },
 
       departureDate: {
@@ -97,14 +145,14 @@ export default {
         value: today,
         min: today,
         max: MAX_DATE,
-        error: 'something is wrong',
+        error: '',
       },
 
       returnDate: {
         id: 'return-date',
         value: '',
         max: MAX_DATE,
-        error: 'something is wrong',
+        error: '',
       },
 
       rowStyle: {
@@ -115,36 +163,23 @@ export default {
 
   computed: {
     originOptions() {
-      return [{
-        text: '',
-        value: '',
-      }, {
-        text: 'orig1',
-        value: 'orig1',
-      }, {
-        text: 'orig2',
-        value: 'orig2',
-      }];
+      return [
+        { text: '', value: '', },
+        { text: 'orig1', value: 'orig1', },
+        { text: 'orig2', value: 'orig2', }
+      ];
     },
 
     destOptions() {
       // TODO FPish
       if (this.origin.value) {
-        return [{
-          text: '',
-          value: '',
-        }, {
-          text: 'dest1',
-          value: 'dest1',
-        }, {
-          text: 'dest2',
-          value: 'dest2',
-        }];
+        return [
+          { text: '', value: '' },
+          { text: 'dest1', value: 'dest1' },
+          { text: 'dest2', value: 'dest2' }
+        ];
       } else {
-        return [{
-          text: '',
-          value: '',
-        }];
+        return [{ text: '', value: '' }];
       }
     },
 
@@ -152,16 +187,29 @@ export default {
       return !this.origin.value;
     },
 
-    minReturnDate() {
+    returnDateMin() {
       let depDate = this.departureDate.value;
       return depDate ? depDate : MAX_DATE;
     },
+
+    valid() {
+      let errors = [
+        this.origin.error,
+        this.destination.error,
+        this.departureDate.error,
+        this.returnDate.error,
+      ];
+
+      return R.all(R.isEmpty, errors);
+    }
   },
 
   methods: {
     handleOriginSelect(selected) {
       // TODO ramda way
       this.origin.value = selected;
+      this.origin.error = '';
+
       // TODO ramda way
       this.destination.value = '';
     },
@@ -169,27 +217,38 @@ export default {
     handleDestinationSelect(selected) {
       // TODO ramda way
       this.destination.value = selected;
+      this.destination.error = '';
     },
 
     handleDepartureDateSelect(selected) {
       // TODO ramda way
       this.departureDate.value = selected;
+      this.departureDate.error = '';
 
       if (dateStrGt(this.departureDate.value, this.returnDate.value)) {
         // TODO ramda way
         this.returnDate.value = '';
+        this.returnDate.error = '';
       }
     },
 
     handleReturnDateSelect(selected) {
       // TODO ramda way
       this.returnDate.value = selected;
+      this.returnDate.error = '';
     },
 
     handleSearchClick() {
-      console.log('search in progress ...');
+      this.validate();
 
-      // TODO validate
+      if (this.valid) {
+        this.search();
+      }
+    },
+
+    search() {
+      console.log('search in progress ...')
+
       // TODO get/fill in depFlightOptions
       // TODO get/fill in retFlightOptions, if return date set
       // TODO show a date picker for return fligth pick, if return date not set
@@ -198,7 +257,25 @@ export default {
       //  - departure flights
       //  - [return flights]
 
-    }
+    },
+
+    validate() {
+      let origin = this.origin.value;
+      let destination = this.destination.value;
+      let depDate = this.departureDate.value;
+      let retDate = this.returnDate.value;
+
+      // TODO ramda way
+      this.origin.error = validateOrigin(origin);
+      this.destination.error = validateDestination(destination);
+      this.departureDate.error = validateDepartureDate(today, depDate);
+
+      if (this.returnDate.value) {
+        this.returnDate.error = validateReturnDate(depDate, today, retDate);
+      } else {
+        this.returnDate.error = '';
+      }
+    },
   },
 };
 </script>
