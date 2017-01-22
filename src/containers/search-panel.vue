@@ -1,41 +1,51 @@
 <template>
-  <div :id="id" >
-    <Labell text="Origin" />
-    <ComboBox
-      id="origin"
-      @select="handleOriginSelect($event)"
-      :options="originOptions"
-      :selectedValue="origin"
-    />
+  <div :id="id" :style="{ boxSizing: 'border-box', padding: '10px', border: '1px solid #999' }" >
+    <div :style="rowStyle">
+      <Labell text="Origin" />
+      <ComboBox
+        id="origin"
+        @select="handleOriginSelect($event)"
+        :options="originOptions"
+        :selectedValue="origin"
+      />
+    </div>
 
-    <Labell text="Destination" />
-    <ComboBox
-      id="destination"
-      @select="handleDestinationSelect($event)"
-      :options="destOptions"
-      :selectedValue="destination"
-      :disabled="destDisabled"
-    />
+    <div :style="rowStyle">
+      <Labell text="Destination" />
+      <ComboBox
+        id="destination"
+        @select="handleDestinationSelect($event)"
+        :options="destOptions"
+        :selectedValue="destination"
+        :disabled="destDisabled"
+      />
+    </div>
 
-    <Labell text="Departure Date" />
-    <DatePicker
-      id="departure-date"
-      @select="handleDepartureDateSelect($event)"
-      :min="minDepartureDate"
-      :max="maxDepartureDate"
-      :selected="departureDate"
-    />
+    <div :style="rowStyle">
+      <Labell text="Departure Date" />
+      <DatePicker
+        id="departure-date"
+        @select="handleDepartureDateSelect($event)"
+        :min="minDepartureDate"
+        :max="maxDepartureDate"
+        :selected="departureDate"
+      />
+    </div>
 
-    <Labell text="Return Date" />
-    <DatePicker
-      id="return-date"
-      @select="handleReturnDateSelect($event)"
-      :min="minReturnDate"
-      :max="maxReturnDate"
-      :selected="returnDate"
-    />
+    <div :style="rowStyle">
+      <Labell text="Return Date" />
+      <DatePicker
+        id="return-date"
+        @select="handleReturnDateSelect($event)"
+        :min="minReturnDate"
+        :max="maxReturnDate"
+        :selected="returnDate"
+      />
+    </div>
 
-    <button @click="handleSearchClick">Search</button>
+    <div :style="rowStyle">
+      <button @click="handleSearchClick">Search</button>
+    </div>
 
   </div>
 </template>
@@ -72,6 +82,9 @@ export default {
       maxDepartureDate: MAX_DATE,
       returnDate: '',
       maxReturnDate: MAX_DATE,
+      rowStyle: {
+        padding: '4px',
+      },
     };
   },
 
