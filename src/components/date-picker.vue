@@ -6,6 +6,7 @@
     :value="selected"
     :min="min"
     :max="max"
+    :style="{ width }"
   />
 </template>
 
@@ -18,6 +19,12 @@ export default {
       type: String,
       required: true,
     },
+
+    width: {
+      type: String,
+      default: '123px',
+    },
+
     selected: String,
     min: String,
     max: String,
