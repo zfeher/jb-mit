@@ -1,14 +1,12 @@
 <template>
-  <div :id="`${id}-container`">
-    <select :id="id" @change="handleChange($event)" :disabled="disabled" >
-      <option
-          v-for="option in options"
-          :value="option.value"
-          :selected="isSelected(option.value)" >
-        {{ option.text }}
-      </option>
-    </select>
-  </div>
+  <select :id="id" @change="handleChange($event)" :disabled="disabled" >
+    <option
+        v-for="option in options"
+        :value="option.value"
+        :selected="isSelected(option.value)" >
+      {{ option.text }}
+    </option>
+  </select>
 </template>
 
 <script>
