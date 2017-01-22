@@ -1,22 +1,23 @@
 <template>
   <div id="app">
+    <Labell text="Origin" />
     <ComboBox
       id="origin"
       @select="handleOriginSelect($event)"
-      label="Origin"
       :options="originOptions"
       :selectedValue="origin"
     />
 
+    <Labell text="Destination" />
     <ComboBox
       id="destination"
       @select="handleDestinationSelect($event)"
-      label="Destination"
       :options="destOptions"
       :selectedValue="destination"
       :disabled="destDisabled"
     />
 
+    <Labell text="Departure Date" />
     <DatePicker
       id="departureDate"
       @select="handleDepartureDateSelect($event)"
@@ -25,6 +26,7 @@
       :selected="departureDate"
     />
 
+    <Labell text="Return Date" />
     <DatePicker
       id="returnDate"
       @select="handleReturnDateSelect($event)"
@@ -35,24 +37,21 @@
 
     <button @click="handleSearchClick">Search</button>
 
+    <Labell text="Departure Flights" />
     <ListBox
       id="departureFlight"
       @select="handleDepFlightSelect($event)"
-      label="Departure Flights"
       :options="depFlightOptions"
       :selectedValue="departureFlight"
     />
 
+    <Labell text="Return Flights" />
     <ListBox
       id="returnFlight"
       @select="handleRetFlightSelect($event)"
-      label="Return Flights"
       :options="retFlightOptions"
       :selectedValue="returnFlight"
     />
-
-
-
 
 
   </div>
@@ -60,7 +59,7 @@
 
 <script>
 import * as R from 'Ramda';
-import { ComboBox, DatePicker, ListBox } from './components';
+import { Labell, ComboBox, DatePicker, ListBox } from './components';
 import { dateStrGt, todayDateStr } from './common';
 
 let MAX_DATE = '2018-12-31';
@@ -70,6 +69,7 @@ export default {
   name: 'App',
 
   components: {
+    Labell,
     ComboBox,
     DatePicker,
     ListBox,

@@ -1,6 +1,5 @@
 <template>
   <div :id="`${id}-container`">
-    <label :for="id">{{ label }}</label>
     <select :id="id" @change="handleChange($event)" :size="size" >
       <option
           v-for="option in options"
@@ -21,8 +20,6 @@ export default {
       type: String,
       required: true,
     },
-
-    label: String,
 
     size: {
       type: Number,
