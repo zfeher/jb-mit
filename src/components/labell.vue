@@ -1,5 +1,9 @@
 <template>
-  <span :id="id">{{text}}</span>
+  <span :id="id" >
+    <p :style="{ boxSizing: 'border-box', margin: 0, padding: 0, display: 'inline-block', width }" >
+      {{text}}
+    </p>
+  </span>
 </template>
 
 <script>
@@ -8,6 +12,11 @@ export default {
 
   props: {
     id: String,
+
+    width: {
+      type: String,
+      default: '200px',
+    },
 
     text: {
       type: String,
@@ -19,3 +28,4 @@ export default {
 
 <style>
 </style>
+
