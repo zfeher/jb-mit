@@ -1,20 +1,30 @@
 <template>
-  <div :id="id" >
-    <Labell text="Departure Flights" />
-    <ListBox
-      id="departure-flight"
-      @select="handleDepFlightSelect($event)"
-      :options="depFlightOptions"
-      :selectedValue="departureFlight"
-    />
+  <div :id="id" :style="{ boxSizing: 'border-box', padding: '10px', border: '1px solid #999' }" >
+    <div :style="rowStyle">
+      <Labell text="Departure Flights" />
+    </div>
 
-    <Labell text="Return Flights" />
-    <ListBox
-      id="return-flight"
-      @select="handleRetFlightSelect($event)"
-      :options="retFlightOptions"
-      :selectedValue="returnFlight"
-    />
+    <div :style="rowStyle">
+      <ListBox
+          id="departure-flight"
+          @select="handleDepFlightSelect($event)"
+          :options="depFlightOptions"
+          :selectedValue="departureFlight"
+        />
+    </div>
+
+    <div :style="rowStyle">
+      <Labell text="Return Flights" />
+    </div>
+
+    <div :style="rowStyle">
+      <ListBox
+        id="return-flight"
+        @select="handleRetFlightSelect($event)"
+        :options="retFlightOptions"
+        :selectedValue="returnFlight"
+      />
+    </div>
   </div>
 </template>
 
@@ -40,6 +50,9 @@ export default {
     return {
       departureFlight: '',
       returnFlight: '',
+      rowStyle: {
+        padding: '4px',
+      },
     };
   },
 
