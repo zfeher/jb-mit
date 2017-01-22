@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <SearchPanel id="search-panel" />
+    </br>
     <SearchResultPanel id="search-result-panel" />
   </div>
 </template>
