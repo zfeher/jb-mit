@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div :id="id" >
     <Labell text="Origin" />
     <ComboBox
       id="origin"
@@ -37,42 +37,30 @@
 
     <button @click="handleSearchClick">Search</button>
 
-    <Labell text="Departure Flights" />
-    <ListBox
-      id="departureFlight"
-      @select="handleDepFlightSelect($event)"
-      :options="depFlightOptions"
-      :selectedValue="departureFlight"
-    />
-
-    <Labell text="Return Flights" />
-    <ListBox
-      id="returnFlight"
-      @select="handleRetFlightSelect($event)"
-      :options="retFlightOptions"
-      :selectedValue="returnFlight"
-    />
-
-
   </div>
 </template>
 
 <script>
-import * as R from 'Ramda';
-import { Labell, ComboBox, DatePicker, ListBox } from './components';
-import { dateStrGt, todayDateStr } from './common';
+import { Labell, ComboBox, DatePicker } from '../components';
+import { dateStrGt, todayDateStr } from '../common';
 
 let MAX_DATE = '2018-12-31';
 let today = todayDateStr();
 
 export default {
-  name: 'App',
+  name: 'SearchPanel',
 
   components: {
-    Labell,
     ComboBox,
     DatePicker,
-    ListBox,
+    Labell,
+  },
+
+  props: {
+    id: {
+      type: String,
+      required: true,
+    }
   },
 
   data() {
@@ -84,8 +72,6 @@ export default {
       maxDepartureDate: MAX_DATE,
       returnDate: '',
       maxReturnDate: MAX_DATE,
-      departureFlight: '',
-      returnFlight: '',
     };
   },
 
@@ -132,26 +118,6 @@ export default {
       let departureDate = this.departureDate;
       return departureDate ? departureDate : MAX_DATE;
     },
-
-    depFlightOptions() {
-      return [{
-        text: 'dep1',
-        value: 'dep1',
-      }, {
-        text: 'dep2',
-        value: 'dep2',
-      }];
-    },
-
-    retFlightOptions() {
-      return [{
-        text: 'ret1',
-        value: 'ret1',
-      }, {
-        text: 'ret2',
-        value: 'ret2',
-      }];
-    },
   },
 
   methods: {
@@ -176,14 +142,6 @@ export default {
       this.returnDate = selected;
     },
 
-    handleDepFlightSelect(selected) {
-      this.departureFlight = selected;
-    },
-
-    handleRetFlightSelect(selected) {
-      this.returnFlight = selected;
-    },
-
     handleSearchClick() {
       console.log('search in progress ...');
 
@@ -192,6 +150,9 @@ export default {
       // TODO get/fill in retFlightOptions, if return date set
       // TODO show a date picker for return fligth pick, if return date not set
       // TODO get/fill/show retFlightOptions if return date set afterwards
+      // TODO emit search event with result
+      //  - departure flights
+      //  - [return flights]
 
     }
   },

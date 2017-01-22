@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { App } from './';
+import { App } from './containers';
 
 new Vue({
   el: '#app',
