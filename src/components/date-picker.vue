@@ -1,14 +1,12 @@
 <template>
-  <div :id="`${id}-container`">
-    <input
-      :id="id"
-      @change="handleChange($event)"
-      type="date"
-      :value="selected"
-      :min="min"
-      :max="max"
-    />
-  </div>
+  <input
+    :id="id"
+    @change="handleChange($event)"
+    type="date"
+    :value="selected"
+    :min="min"
+    :max="max"
+  />
 </template>
 
 <script>
