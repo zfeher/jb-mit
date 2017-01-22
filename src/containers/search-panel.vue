@@ -3,44 +3,48 @@
     <div :style="rowStyle">
       <Labell text="Origin" />
       <ComboBox
-        id="origin"
+        :id="origin.id"
         @select="handleOriginSelect($event)"
         :options="originOptions"
-        :selectedValue="origin"
+        :selectedValue="origin.value"
       />
+      <ErrorMessage v-if="true" :message="origin.error" />
     </div>
 
     <div :style="rowStyle">
       <Labell text="Destination" />
       <ComboBox
-        id="destination"
+        :id="destination.id"
         @select="handleDestinationSelect($event)"
         :options="destOptions"
-        :selectedValue="destination"
+        :selectedValue="destination.value"
         :disabled="destDisabled"
       />
+      <ErrorMessage v-if="true" :message="destination.error" />
     </div>
 
     <div :style="rowStyle">
       <Labell text="Departure Date" />
       <DatePicker
-        id="departure-date"
+        :id="departureDate.id"
         @select="handleDepartureDateSelect($event)"
-        :min="minDepartureDate"
-        :max="maxDepartureDate"
-        :selected="departureDate"
+        :min="departureDate.min"
+        :max="departureDate.max"
+        :selected="departureDate.value"
       />
+      <ErrorMessage v-if="true" :message="departureDate.error" />
     </div>
 
     <div :style="rowStyle">
       <Labell text="Return Date" />
       <DatePicker
-        id="return-date"
+        :id="returnDate.id"
         @select="handleReturnDateSelect($event)"
         :min="minReturnDate"
-        :max="maxReturnDate"
-        :selected="returnDate"
+        :max="returnDate.max"
+        :selected="returnDate.value"
       />
+      <ErrorMessage v-if="true" :message="returnDate.error" />
     </div>
 
     <div :style="rowStyle">
@@ -51,7 +55,7 @@
 </template>
 
 <script>
-import { Labell, ComboBox, DatePicker } from '../components';
+import { Labell, ComboBox, DatePicker, ErrorMessage } from '../components';
 import { dateStrGt, todayDateStr } from '../common';
 
 let MAX_DATE = '2018-12-31';
@@ -63,6 +67,7 @@ export default {
   components: {
     ComboBox,
     DatePicker,
+    ErrorMessage,
     Labell,
   },
 
@@ -75,13 +80,33 @@ export default {
 
   data() {
     return {
-      origin: '',
-      destination: '',
-      departureDate: today,
-      minDepartureDate: today,
-      maxDepartureDate: MAX_DATE,
-      returnDate: '',
-      maxReturnDate: MAX_DATE,
+      origin: {
+        id: 'origin',
+        value: '',
+        error: 'something is wrong',
+      },
+
+      destination: {
+        id: 'destination',
+        value: '',
+        error: 'something is wrong',
+      },
+
+      departureDate: {
+        id: 'departure-date',
+        value: today,
+        min: today,
+        max: MAX_DATE,
+        error: 'something is wrong',
+      },
+
+      returnDate: {
+        id: 'return-date',
+        value: '',
+        max: MAX_DATE,
+        error: 'something is wrong',
+      },
+
       rowStyle: {
         padding: '4px',
       },
@@ -104,7 +129,7 @@ export default {
 
     destOptions() {
       // TODO FPish
-      if (this.origin) {
+      if (this.origin.value) {
         return [{
           text: '',
           value: '',
@@ -124,35 +149,41 @@ export default {
     },
 
     destDisabled() {
-      return !this.origin;
+      return !this.origin.value;
     },
 
     minReturnDate() {
-      let departureDate = this.departureDate;
-      return departureDate ? departureDate : MAX_DATE;
+      let depDate = this.departureDate.value;
+      return depDate ? depDate : MAX_DATE;
     },
   },
 
   methods: {
     handleOriginSelect(selected) {
-      this.origin = selected;
-      this.destination = '';
+      // TODO ramda way
+      this.origin.value = selected;
+      // TODO ramda way
+      this.destination.value = '';
     },
 
     handleDestinationSelect(selected) {
-      this.destination = selected;
+      // TODO ramda way
+      this.destination.value = selected;
     },
 
     handleDepartureDateSelect(selected) {
-      this.departureDate = selected;
+      // TODO ramda way
+      this.departureDate.value = selected;
 
-      if (dateStrGt(this.departureDate, this.returnDate)) {
-        this.returnDate = '';
+      if (dateStrGt(this.departureDate.value, this.returnDate.value)) {
+        // TODO ramda way
+        this.returnDate.value = '';
       }
     },
 
     handleReturnDateSelect(selected) {
-      this.returnDate = selected;
+      // TODO ramda way
+      this.returnDate.value = selected;
     },
 
     handleSearchClick() {
