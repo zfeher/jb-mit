@@ -60,6 +60,7 @@ import { DatePicker, ErrorMessage, Labell, ListBox } from '../components';
 import { MAX_FLIGHT_DATE } from '../config';
 import { isNotEmpty, todayDateStr, isoDateStrToShortTimeStr, strToDate, dateToDateStr } from '../common';
 import { validate, checkDateStrGte } from '../validator';
+import { searchFlights } from '../services';
 
 let __ = R.__;
 let today = todayDateStr();
@@ -193,16 +194,17 @@ export default {
       this.returnDate.value = selected;
       this.returnDate.error = validateReturnDate(this.departureDate, today, this.returnDate.value);
 
+      this.returnFlights = [];
 
-      // TODO init search if valid
-      if (isNotEmpty(this.returnDate.error)) {
-        // TODO search
+      if (R.isEmpty(this.returnDate.error)) {
         // TODO debounce ?
+        let { destination, origin } = this;
+        let retDate = this.returnDate.value;
 
-      } else {
-        this.returnFlights = [];
+        searchFlights(destination, origin, retDate).then(result => {
+          this.$emit('searchReturnFlights', result);
+        });
       }
-
     },
 
     handleDepFlightSelect(selected) {
