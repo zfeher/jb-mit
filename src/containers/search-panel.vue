@@ -219,6 +219,26 @@ export default {
     'returnDate.value': function(value) {
       this.$emit('selectReturnDate', value);
     },
+
+    initOrigin: function(value) {
+      this.origin.value = value;
+      this.origin.error = '';
+    },
+
+    initDestination: function(value) {
+      this.destination.value = value;
+      this.destination.error = '';
+    },
+
+    initDepartureDate: function(value) {
+      this.departureDate.value = value;
+      this.departureDate.error = '';
+    },
+
+    initReturnDate: function(value) {
+      this.returnDate.value = value;
+      this.returnDate.error = '';
+    },
   },
 
   methods: {

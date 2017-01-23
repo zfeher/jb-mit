@@ -95,8 +95,15 @@ export default {
     },
 
     handleResetClick() {
-      // TODO
-      console.log('reset data ...')
+      // TODO can't use getDefaultData here because of vue
+      this.origin = '';
+      this.destination = '';
+      this.departureDate = today;
+      this.returnDate = '';
+      this.departureFlights = [];
+      this.returnFlights = [];
+      this.departureFlight = '';
+      this.returnFlight = '';
     }
   },
 };
