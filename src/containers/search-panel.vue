@@ -58,10 +58,33 @@
 import * as R from 'ramda';
 import { Labell, ComboBox, DatePicker, ErrorMessage } from '../components';
 import { dateStrGt, todayDateStr } from '../common';
-import { validateOrigin, validateDestination, validateDepartureDate, validateReturnDate } from '../validator';
+import { validate, checkNotEmpty, checkDateStrGte } from '../validator';
 import { MAX_FLIGHT_DATE } from '../config';
 
+let __ = R.__;
 let today = todayDateStr();
+
+let validateOrigin = validate([checkNotEmpty('origin')]);
+let validateDestination = validate([checkNotEmpty('destination')]);
+
+let validateDepartureDate = (today, value) =>
+  validate(
+    [
+      checkNotEmpty('departure date'),
+      checkDateStrGte('departure date', 'today', __, today)
+    ],
+    value,
+  );
+
+let validateReturnDate = (departureDate, today, value) =>
+  validate(
+    [
+      checkNotEmpty('return date'),
+      checkDateStrGte('return date', 'departure date', __, departureDate),
+      checkDateStrGte('return date', 'today', __, today)
+    ],
+    value,
+);
 
 export default {
   name: 'SearchPanel',
