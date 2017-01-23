@@ -217,6 +217,12 @@ export default {
       this.$emit('resetClick');
     },
   },
+
+  watch: {
+    initReturnFlights(value) {
+      this.returnFlights = value;
+    },
+  },
 };
 </script>
 
