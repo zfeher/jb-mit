@@ -60,6 +60,7 @@ import { Labell, ComboBox, DatePicker, ErrorMessage } from '../components';
 import { dateStrGt, todayDateStr } from '../common';
 import { validate, checkNotEmpty, checkDateStrGte } from '../validator';
 import { MAX_FLIGHT_DATE } from '../config';
+import { getCitiesWithConnections, searchFlights } from '../services';
 
 let __ = R.__;
 let today = todayDateStr();
@@ -85,6 +86,11 @@ let validateReturnDate = (departureDate, today, value) =>
     ],
     value,
 );
+
+let cityToCityOption = city => ({
+  text: city.shortName,
+  value: city.iata,
+});
 
 export default {
   name: 'SearchPanel',
@@ -162,21 +168,33 @@ export default {
 
   computed: {
     originOptions() {
-      return [
-        { text: '', value: '', },
-        { text: 'orig1', value: 'orig1', },
-        { text: 'orig2', value: 'orig2', }
-      ];
+      let emptyItem = { text: '', value: '', };
+      return R.compose(
+        R.concat([emptyItem]),
+        R.map(cityToCityOption),
+      )(this.citiesWithConnections);
     },
 
     destOptions() {
       // TODO FPish
       if (this.origin.value) {
-        return [
-          { text: '', value: '' },
-          { text: 'dest1', value: 'dest1' },
-          { text: 'dest2', value: 'dest2' }
-        ];
+        let emptyItem = { text: '', value: '', };
+
+        // TODO extract
+        let originConnections = R.compose(
+          R.pluck('iata'),
+          R.flatten(),
+          R.pluck('connections'),
+          R.filter(
+            R.propEq('iata', this.origin.value)),
+          )(this.citiesWithConnections);
+
+        return R.compose(
+          R.concat([emptyItem]),
+          R.map(cityToCityOption),
+          R.filter(city => R.contains(city.iata, originConnections))
+        )(this.citiesWithConnections);
+
       } else {
         return [{ text: '', value: '' }];
       }
@@ -204,23 +222,23 @@ export default {
   },
 
   watch: {
-    'origin.value': function(value) {
+    'origin.value'(value) {
       this.$emit('selectOrigin', value);
     },
 
-    'destination.value': function(value) {
+    'destination.value'(value) {
       this.$emit('selectDestination', value);
     },
 
-    'departureDate.value': function(value) {
+    'departureDate.value'(value) {
       this.$emit('selectDepartureDate', value);
     },
 
-    'returnDate.value': function(value) {
+    'returnDate.value'(value) {
       this.$emit('selectReturnDate', value);
     },
 
-    initOrigin: function(value) {
+    initOrigin(value) {
       this.origin.value = value;
       this.origin.error = '';
     },
@@ -284,71 +302,22 @@ export default {
     },
 
     search() {
-      console.log('search in progress ...')
+      let origin = this.origin.value;
+      let destination = this.destination.value;
+      let depDate = this.departureDate.value;
+      let retDate = this.returnDate.value;
 
-      // TODO async/await usage :)
+      // TODO async/await
+      searchFlights(origin, destination, depDate).then(result => {
+        this.$emit('searchDepartureFlights', result);
+      });
 
-      // search dep flights
-      this.$emit('searchDepartureFlights', [
-        {
-          carrierCode: 'W6',
-          flightNumber: '5873630bf30750acf9367715',
-          remainingTickets: 31,
-          departure: '2017-02-01T07:40:00+0100',
-          arrival: '2017-02-01T10:40:00+0100',
-          fares: [
-            {
-              fareSellKey: '5873630b4095e44baa165108',
-              price: 42,
-              bundle: 'basic'
-            },
-            {
-              fareSellKey: '5873630b0ecc2de616093ff0',
-              price: 49,
-              bundle: 'standard'
-            },
-            {
-              fareSellKey: '5873630b785bb8590e190e5b',
-              price: 70,
-              bundle: 'plus'
-            }
-          ]
-        },
-      ]);
-
-      // search ret flights if ret date set
       if (this.returnDate.value) {
-        this.$emit('searchReturnFlights', [
-          {
-            carrierCode: 'W6',
-            flightNumber: '5873630bb17f535142498eb4',
-            remainingTickets: 43,
-            departure: '2017-02-01T10:20:00+0100',
-            arrival: '2017-02-01T13:20:00+0100',
-            fares: [
-              {
-                fareSellKey: '5873630bf06ea3c915897d05',
-                price: 38,
-                bundle: 'basic'
-              },
-              {
-                fareSellKey: '5873630b0c582d4bbae8d505',
-                price: 45,
-                bundle: 'standard'
-              },
-              {
-                fareSellKey: '5873630bcd101c8ff982ece3',
-                price: 73,
-                bundle: 'plus'
-              }
-            ]
-          },
-        ]);
+        // TODO async/await
+        searchFlights(destination, origin, retDate).then(result => {
+          this.$emit('searchReturnFlights', result);
+        });
       }
-
-      // TODO show a date picker for return fligth pick, if return date not set
-      // TODO get/fill/show retFlightOptions if return date set afterwards
-
     },
 
     validate() {
@@ -368,6 +337,12 @@ export default {
         this.returnDate.error = '';
       }
     },
+  },
+
+  created() {
+    // TODO async/await
+    getCitiesWithConnections()
+      .then(data => this.citiesWithConnections = data);
   },
 };
 </script>
