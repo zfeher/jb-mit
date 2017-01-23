@@ -13,6 +13,9 @@ export let todayDateStr = R.compose(
   now,
 );
 
+// 2017-02-01T12:34:00+0100 > 12:34
+export let isoDateStrToShortTimeStr = substr(11, 5);
+
 let strToDate = str => new Date(str);
 
 export let dateStrGt = (dateStr1, dateStr2) => {
