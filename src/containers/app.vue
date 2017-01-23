@@ -16,14 +16,27 @@
 
     </br>
 
-    <SearchResultPanel id="search-result-panel" />
+    <SearchResultPanel
+      id="search-result-panel"
+      v-if="showResultPanel"
+      :origin="origin"
+      :destination="destination"
+      :departureDate="departureDate"
+      :initReturnDate="returnDate"
+      :departureFlights="departureFlights"
+      :initReturnFlights="returnFlights"
+      @selectReturnDate="handleSelectReturnDate($event)"
+      @searchReturnFlights="handleSearchRetFlights($event)"
+      @resetClick="handleResetClick"
+    />
   </div>
 </template>
 
 <script>
+import * as R from 'ramda';
 import SearchPanel from './search-panel.vue';
 import SearchResultPanel from './search-result-panel.vue';
-import { todayDateStr } from '../common';
+import { todayDateStr, isNotEmpty } from '../common';
 
 let today = todayDateStr();
 
@@ -51,6 +64,9 @@ export default {
   },
 
   computed: {
+    showResultPanel() {
+      return R.any(isNotEmpty, [this.departureFlights, this.returnFlights]);
+    },
   },
 
   methods: {
@@ -77,6 +93,11 @@ export default {
     handleSearchRetFlights(result) {
       this.returnFlights = result;
     },
+
+    handleResetClick() {
+      // TODO
+      console.log('reset data ...')
+    }
   },
 };
 </script>
