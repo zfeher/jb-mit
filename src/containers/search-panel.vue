@@ -58,10 +58,10 @@
 import * as R from 'ramda';
 import { Labell, ComboBox, DatePicker, ErrorMessage } from '../components';
 import { dateStrGt, dateStrLt, isNotEmpty, todayDateStr } from '../common';
+import { MAX_FLIGHT_DATE } from '../config';
 
 let __ = R.__;
 
-let MAX_DATE = '2018-12-31';
 let today = todayDateStr();
 
 let checkNotEmpty = R.curry(
@@ -164,14 +164,14 @@ export default {
         id: 'departure-date',
         value: this.initDepartureDate,
         min: today,
-        max: MAX_DATE,
+        max: MAX_FLIGHT_DATE,
         error: '',
       },
 
       returnDate: {
         id: 'return-date',
         value: this.initReturnDate,
-        max: MAX_DATE,
+        max: MAX_FLIGHT_DATE,
         error: '',
       },
 
@@ -209,7 +209,7 @@ export default {
 
     returnDateMin() {
       let depDate = this.departureDate.value;
-      return depDate ? depDate : MAX_DATE;
+      return depDate ? depDate : MAX_FLIGHT_DATE;
     },
 
     valid() {
