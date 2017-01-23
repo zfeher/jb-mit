@@ -57,55 +57,11 @@
 <script>
 import * as R from 'ramda';
 import { Labell, ComboBox, DatePicker, ErrorMessage } from '../components';
-import { dateStrGt, dateStrLt, isNotEmpty, todayDateStr } from '../common';
+import { dateStrGt, todayDateStr } from '../common';
+import { validateOrigin, validateDestination, validateDepartureDate, validateReturnDate } from '../validator';
 import { MAX_FLIGHT_DATE } from '../config';
 
-let __ = R.__;
-
 let today = todayDateStr();
-
-let checkNotEmpty = R.curry(
-  (name, value) => R.isEmpty(value) ? `${name} should be set` : ''
-);
-
-let checkDateStrGte = R.curry(
-  (name, otherName, dateStr1, dateStr2) =>
-    dateStrLt(dateStr1, dateStr2) ?
-      `${name} should be >= ${otherName}` :
-      ''
-);
-
-let validate = R.curry(
-  (checkers, value) => {
-    return R.compose(
-      R.when(R.isNil, R.always('')),
-      R.find(isNotEmpty),
-      R.map(checker => checker(value)),
-    )(checkers);
-  }
-);
-
-let validateOrigin = validate([checkNotEmpty('origin')]);
-let validateDestination = validate([checkNotEmpty('destination')]);
-
-let validateDepartureDate = (today, value) =>
-  validate(
-    [
-      checkNotEmpty('departure date'),
-      checkDateStrGte('departure date', 'today', __, today)
-    ],
-    value,
-  );
-
-let validateReturnDate = (departureDate, today, value) =>
-  validate(
-    [
-      checkNotEmpty('return date'),
-      checkDateStrGte('return date', 'departure date', __, departureDate),
-      checkDateStrGte('return date', 'today', __, today)
-    ],
-    value,
-);
 
 export default {
   name: 'SearchPanel',
