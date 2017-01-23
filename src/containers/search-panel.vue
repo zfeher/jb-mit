@@ -121,7 +121,27 @@ export default {
     id: {
       type: String,
       required: true,
-    }
+    },
+
+    initOrigin: {
+      type: String,
+      default: '',
+    },
+
+    initDestination: {
+      type: String,
+      default: '',
+    },
+
+    initDepartureDate: {
+      type: String,
+      default: '',
+    },
+
+    initReturnDate: {
+      type: String,
+      default: '',
+    },
   },
 
   data() {
@@ -130,19 +150,19 @@ export default {
 
       origin: {
         id: 'origin',
-        value: '',
+        value: this.initOrigin,
         error: '',
       },
 
       destination: {
         id: 'destination',
-        value: '',
+        value: this.initDestination,
         error: '',
       },
 
       departureDate: {
         id: 'departure-date',
-        value: today,
+        value: this.initDepartureDate,
         min: today,
         max: MAX_DATE,
         error: '',
@@ -150,7 +170,7 @@ export default {
 
       returnDate: {
         id: 'return-date',
-        value: '',
+        value: this.initReturnDate,
         max: MAX_DATE,
         error: '',
       },
@@ -204,6 +224,24 @@ export default {
     }
   },
 
+  watch: {
+    'origin.value': function(value) {
+      this.$emit('selectOrigin', value);
+    },
+
+    'destination.value': function(value) {
+      this.$emit('selectDestination', value);
+    },
+
+    'departureDate.value': function(value) {
+      this.$emit('selectDepartureDate', value);
+    },
+
+    'returnDate.value': function(value) {
+      this.$emit('selectReturnDate', value);
+    },
+  },
+
   methods: {
     handleOriginSelect(selected) {
       // TODO ramda way
@@ -249,13 +287,68 @@ export default {
     search() {
       console.log('search in progress ...')
 
-      // TODO get/fill in depFlightOptions
-      // TODO get/fill in retFlightOptions, if return date set
+      // TODO async/await usage :)
+
+      // search dep flights
+      this.$emit('searchDepartureFlights', [
+        {
+          carrierCode: 'W6',
+          flightNumber: '5873630bf30750acf9367715',
+          remainingTickets: 31,
+          departure: '2017-02-01T07:40:00+0100',
+          arrival: '2017-02-01T10:40:00+0100',
+          fares: [
+            {
+              fareSellKey: '5873630b4095e44baa165108',
+              price: 42,
+              bundle: 'basic'
+            },
+            {
+              fareSellKey: '5873630b0ecc2de616093ff0',
+              price: 49,
+              bundle: 'standard'
+            },
+            {
+              fareSellKey: '5873630b785bb8590e190e5b',
+              price: 70,
+              bundle: 'plus'
+            }
+          ]
+        },
+      ]);
+
+      // search ret flights if ret date set
+      if (this.returnDate.value) {
+        this.$emit('searchReturnFlights', [
+          {
+            carrierCode: 'W6',
+            flightNumber: '5873630bb17f535142498eb4',
+            remainingTickets: 43,
+            departure: '2017-02-01T10:20:00+0100',
+            arrival: '2017-02-01T13:20:00+0100',
+            fares: [
+              {
+                fareSellKey: '5873630bf06ea3c915897d05',
+                price: 38,
+                bundle: 'basic'
+              },
+              {
+                fareSellKey: '5873630b0c582d4bbae8d505',
+                price: 45,
+                bundle: 'standard'
+              },
+              {
+                fareSellKey: '5873630bcd101c8ff982ece3',
+                price: 73,
+                bundle: 'plus'
+              }
+            ]
+          },
+        ]);
+      }
+
       // TODO show a date picker for return fligth pick, if return date not set
       // TODO get/fill/show retFlightOptions if return date set afterwards
-      // TODO emit search event with result
-      //  - departure flights
-      //  - [return flights]
 
     },
 
