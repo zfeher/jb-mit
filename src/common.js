@@ -3,6 +3,8 @@ import * as R from 'ramda';
 let now = () => new Date();
 let dateToIsoString = date => date.toISOString();
 
+export let dateToDateStr = date => date.toDateString();
+
 let substr = R.curry(
   (start, end, str) => str.substr(start, end)
 );
@@ -16,7 +18,7 @@ export let todayDateStr = R.compose(
 // 2017-02-01T12:34:00+0100 > 12:34
 export let isoDateStrToShortTimeStr = substr(11, 5);
 
-let strToDate = str => new Date(str);
+export let strToDate = str => new Date(str);
 
 export let dateStrGt = (dateStr1, dateStr2) => {
   // TODO more ramda way?
