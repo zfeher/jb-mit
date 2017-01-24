@@ -17,6 +17,7 @@
 
     <SearchResultPanel
       id="search-result-panel"
+      v-if="showResultPanel"
       @selectDepartureFlight="selectDepartureFlight"
       @selectReturnDate="selectReturnDate($event)"
       @selectReturnFlight="selectReturnFlight"
@@ -34,9 +35,11 @@
 </template>
 
 <script>
+import * as R from 'ramda';
 import { mapState, mapMutations, mapActions } from 'vuex';
 import SearchPanel from './search-panel.vue';
 import SearchResultPanel from './search-result-panel.vue';
+import { isNotEmpty } from '../common.js';
 
 export default {
   name: 'App',
@@ -51,16 +54,22 @@ export default {
     };
   },
 
-  computed: mapState([
-    'origin',
-    'destination',
-    'departureDate',
-    'returnDate',
-    'departureFlights',
-    'returnFlights',
-    'departureFlight',
-    'returnFlight',
-  ]),
+  computed: {
+    showResultPanel() {
+      return R.any(isNotEmpty, [this.departureFlights, this.returnFlights]);
+    },
+
+    ...mapState([
+      'origin',
+      'destination',
+      'departureDate',
+      'returnDate',
+      'departureFlights',
+      'returnFlights',
+      'departureFlight',
+      'returnFlight',
+    ]),
+  },
 
   methods: {
     ...mapMutations([
@@ -72,6 +81,7 @@ export default {
       'selectReturnFlight',
       'startOverClick',
     ]),
+
     ...mapActions(['searchFlights']),
   },
 };
