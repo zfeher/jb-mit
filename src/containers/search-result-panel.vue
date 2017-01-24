@@ -15,6 +15,21 @@
     </div>
 
     <div :style="rowStyle">
+      <Labell text="Return Date" />
+    </div>
+
+    <div :style="rowStyle">
+      <DatePicker
+        id="return-date-after"
+        @select="$emit('selectReturnDate', $event)"
+        :min="returnDate.min"
+        :max="returnDate.max"
+        :selected="returnDate.value"
+      />
+      <ErrorMessage v-if="returnDate.error" :message="returnDate.error" />
+    </div>
+
+    <div :style="rowStyle">
       <Labell :text="retFlightLabel" width="230px" />
     </div>
 
@@ -91,8 +106,15 @@ export default {
     },
 
     returnDate: {
-      type: String,
-      required: true,
+      type: Object,
+      default() {
+        return {
+          value: '',
+          min: '',
+          max: '',
+          error: '',
+        };
+      },
     },
 
     returnFlights: {
@@ -127,7 +149,7 @@ export default {
 
     retFlightLabel() {
       let { origin, destination, returnDate } = this;
-      let date = formatFlightDate(returnDate);
+      let date = formatFlightDate(returnDate.value);
       return `${destination} => ${origin} on ${date}`;
     },
 

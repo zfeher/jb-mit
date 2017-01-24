@@ -18,13 +18,14 @@
     <SearchResultPanel
       id="search-result-panel"
       @selectDepartureFlight="selectDepartureFlight"
+      @selectReturnDate="selectReturnDate($event)"
       @selectReturnFlight="selectReturnFlight"
       :origin="origin.value"
       :destination="destination.value"
       :departureDate="departureDate.value"
       :departureFlights="departureFlights"
       :departureFlight="departureFlight"
-      :returnDate="returnDate.value"
+      :returnDate="returnDate"
       :returnFlights="returnFlights"
       :returnFlight="returnFlight"
     />
