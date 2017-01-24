@@ -3,15 +3,37 @@
     <div :style="rowStyle">
       <Labell :text="depFlightLabel" width="230px" />
     </div>
+
+    <div :style="rowStyle">
+      <ListBox
+          id="departure-flight"
+          @select="$emit('selectDepartureFlight', $event)"
+          :options="depFlightOptions"
+          :selectedValue="departureFlight"
+          width="230px"
+        />
+    </div>
+
   </div>
 </template>
 
 <script>
 import * as R from 'ramda';
-import { strToDate, dateToDateStr } from '../common';
+import { strToDate, dateToDateStr, isoDateStrToShortTimeStr } from '../common';
 import { DatePicker, ErrorMessage, Labell, ListBox } from '../components';
 
 let formatFlightDate = R.compose(dateToDateStr, strToDate);
+
+let flightToFlightOption = flight => {
+  let { departure, arrival, flightNumber, remainingTickets } = flight;
+  let departureTime = isoDateStrToShortTimeStr(departure);
+  let arrivalTime = isoDateStrToShortTimeStr(arrival);
+
+  return {
+    text: `${departureTime} - ${arrivalTime}: ${remainingTickets} tickets`,
+    value: flightNumber,
+  };
+};
 
 export default {
   name: 'SearchResultPanel',
@@ -44,6 +66,16 @@ export default {
       required: true,
     },
 
+    departureFlights: {
+      type: Array,
+      default: [],
+    },
+
+    departureFlight: {
+      type: String,
+      default: '',
+    },
+
   },
 
   data() {
@@ -60,6 +92,11 @@ export default {
       let date = formatFlightDate(departureDate);
       return `${origin} => ${destination} on ${date}`;
     },
+
+    depFlightOptions() {
+      return R.map(flightToFlightOption, this.departureFlights);
+    },
+
   },
 
   methods: {

@@ -17,9 +17,12 @@
 
     <SearchResultPanel
       id="search-result-panel"
+      @selectDepartureFlight="selectDepartureFlight"
       :origin="origin.value"
       :destination="destination.value"
       :departureDate="departureDate.value"
+      :departureFlights="departureFlights"
+      :departureFlight="departureFlight"
     />
   </div>
 </template>
@@ -48,7 +51,8 @@ export default {
     'departureDate',
     'returnDate',
     'departureFlights',
-    'returnFlights'
+    'returnFlights',
+    'departureFlight',
   ]),
 
   methods: {
@@ -56,7 +60,8 @@ export default {
       'selectOrigin',
       'selectDestination',
       'selectDepartureDate',
-      'selectReturnDate'
+      'selectReturnDate',
+      'selectDepartureFlight',
     ]),
     ...mapActions(['searchFlights']),
   },
