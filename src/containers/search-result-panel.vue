@@ -43,6 +43,10 @@
       />
     </div>
 
+    <div :style="rowStyle">
+      <button @click="$emit('startOverClick')">Start Over</button>
+    </div>
+
   </div>
 </template>
 

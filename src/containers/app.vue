@@ -20,6 +20,7 @@
       @selectDepartureFlight="selectDepartureFlight"
       @selectReturnDate="selectReturnDate($event)"
       @selectReturnFlight="selectReturnFlight"
+      @startOverClick="startOverClick"
       :origin="origin.value"
       :destination="destination.value"
       :departureDate="departureDate.value"
@@ -69,6 +70,7 @@ export default {
       'selectReturnDate',
       'selectDepartureFlight',
       'selectReturnFlight',
+      'startOverClick',
     ]),
     ...mapActions(['searchFlights']),
   },

@@ -36,37 +36,39 @@ let validateReturnDate = (departureDate, today, value) =>
 let today = todayDateStr();
 let defaultDepDate = today;
 
-export let createStore = () => new Vuex.Store({
-  state: {
-    origin: {
-      value: '',
-      error: '',
-    },
-
-    destination: {
-      value: '',
-      error: '',
-    },
-
-    departureDate: {
-      value: defaultDepDate,
-      min: today,
-      max: MAX_FLIGHT_DATE,
-      error: '',
-    },
-
-    returnDate: {
-      value: '',
-      min: defaultDepDate,
-      max: MAX_FLIGHT_DATE,
-      error: '',
-    },
-
-    departureFlights: [],
-    returnFlights: [],
-    departureFlight: '',
-    returnFlight: '',
+let getDefaultState = () => ({
+  origin: {
+    value: '',
+    error: '',
   },
+
+  destination: {
+    value: '',
+    error: '',
+  },
+
+  departureDate: {
+    value: defaultDepDate,
+    min: today,
+    max: MAX_FLIGHT_DATE,
+    error: '',
+  },
+
+  returnDate: {
+    value: '',
+    min: defaultDepDate,
+    max: MAX_FLIGHT_DATE,
+    error: '',
+  },
+
+  departureFlights: [],
+  returnFlights: [],
+  departureFlight: '',
+  returnFlight: '',
+});
+
+export let createStore = () => new Vuex.Store({
+  state: getDefaultState(),
 
   getters: {
     valid(state) {
@@ -201,6 +203,12 @@ export let createStore = () => new Vuex.Store({
       state.returnFlight = selected;
     },
 
+    startOverClick(state) {
+      R.forEachObjIndexed(
+        (value, key) => state[key] = value,
+        getDefaultState()
+      );
+    },
   },
 
   actions: {
