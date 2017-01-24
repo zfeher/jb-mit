@@ -14,6 +14,20 @@
         />
     </div>
 
+    <div :style="rowStyle">
+      <Labell :text="retFlightLabel" width="230px" />
+    </div>
+
+    <div :style="rowStyle">
+      <ListBox
+        id="return-flight"
+        @select="$emit('selectReturnFlight', $event)"
+        :options="retFlightOptions"
+        :selectedValue="returnFlight"
+        width="230px"
+      />
+    </div>
+
   </div>
 </template>
 
@@ -76,6 +90,20 @@ export default {
       default: '',
     },
 
+    returnDate: {
+      type: String,
+      required: true,
+    },
+
+    returnFlights: {
+      type: Array,
+      default: [],
+    },
+
+    returnFlight: {
+      type: String,
+      default: '',
+    },
   },
 
   data() {
@@ -97,6 +125,15 @@ export default {
       return R.map(flightToFlightOption, this.departureFlights);
     },
 
+    retFlightLabel() {
+      let { origin, destination, returnDate } = this;
+      let date = formatFlightDate(returnDate);
+      return `${destination} => ${origin} on ${date}`;
+    },
+
+    retFlightOptions() {
+      return R.map(flightToFlightOption, this.returnFlights);
+    },
   },
 
   methods: {

@@ -65,6 +65,7 @@ export let createStore = () => new Vuex.Store({
     departureFlights: [],
     returnFlights: [],
     departureFlight: '',
+    returnFlight: '',
   },
 
   getters: {
@@ -194,6 +195,10 @@ export let createStore = () => new Vuex.Store({
 
     selectDepartureFlight(state, selected) {
       state.departureFlight = selected;
+    },
+
+    selectReturnFlight(state, selected) {
+      state.returnFlight = selected;
     },
 
   },
