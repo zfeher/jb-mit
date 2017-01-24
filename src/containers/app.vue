@@ -6,6 +6,7 @@
       @selectDestination="selectDestination($event)"
       @selectDepartureDate="selectDepartureDate($event)"
       @selectReturnDate="selectReturnDate($event)"
+      @searchFlights="searchFlights"
       :origin="origin"
       :destination="destination"
       :departureDate="departureDate"
@@ -21,7 +22,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex';
+import { mapState, mapMutations, mapActions } from 'vuex';
 import SearchPanel from './search-panel.vue';
 import SearchResultPanel from './search-result-panel.vue';
 
@@ -38,9 +39,24 @@ export default {
     };
   },
 
-  computed: mapState(['origin', 'destination', 'departureDate', 'returnDate']),
+  computed: mapState([
+    'origin',
+    'destination',
+    'departureDate',
+    'returnDate',
+    'departureFlights',
+    'returnFlights'
+  ]),
 
-  methods: mapMutations(['selectOrigin', 'selectDestination', 'selectDepartureDate', 'selectReturnDate']),
+  methods: {
+    ...mapMutations([
+      'selectOrigin',
+      'selectDestination',
+      'selectDepartureDate',
+      'selectReturnDate'
+    ]),
+    ...mapActions(['searchFlights']),
+  },
 };
 </script>
 

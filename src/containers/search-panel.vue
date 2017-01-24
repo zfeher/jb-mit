@@ -47,6 +47,10 @@
       <ErrorMessage v-if="returnDate.error" :message="returnDate.error" />
     </div>
 
+    <div :style="rowStyle">
+      <button @click="$emit('searchFlights')">Search</button>
+    </div>
+
   </div>
 </template>
 
