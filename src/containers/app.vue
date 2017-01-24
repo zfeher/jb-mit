@@ -17,6 +17,9 @@
 
     <SearchResultPanel
       id="search-result-panel"
+      :origin="origin.value"
+      :destination="destination.value"
+      :departureDate="departureDate.value"
     />
   </div>
 </template>
