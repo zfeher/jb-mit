@@ -10,6 +10,11 @@ export let createStore = () => new Vuex.Store({
       value: '',
       error: '',
     },
+
+    destination: {
+      value: '',
+      error: '',
+    },
   },
 
   getters: {
@@ -18,6 +23,22 @@ export let createStore = () => new Vuex.Store({
   mutations: {
     selectOrigin(state, selected) {
       state.origin = {
+        value: selected,
+        error: '',
+      };
+
+      // TODO duplicate selectDestination(state, '')
+      // TODO add a selectOrigin action which commits multiple mutations way ?
+      //  - commit selectOrigin
+      //  - commit selectDestination
+      state.destination = {
+        value: '',
+        error: '',
+      };
+    },
+
+    selectDestination(state, selected) {
+      state.destination = {
         value: selected,
         error: '',
       };

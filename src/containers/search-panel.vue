@@ -10,6 +10,19 @@
       />
       <ErrorMessage v-if="origin.error" :message="origin.error" />
     </div>
+
+    <div :style="rowStyle">
+      <Labell text="Destination" />
+      <ComboBox
+        id="destination"
+        @select="$emit('selectDestination', $event)"
+        :options="destOptions"
+        :selectedValue="destination.value"
+        :disabled="destDisabled"
+      />
+      <ErrorMessage v-if="destination.error" :message="destination.error" />
+    </div>
+
   </div>
 </template>
 
@@ -47,6 +60,17 @@ export default {
         };
       },
     },
+
+    destination: {
+      type: Object,
+      default() {
+        return {
+          disabled: false,
+          value: '',
+          error: '',
+        };
+      },
+    },
   },
 
   data() {
@@ -66,6 +90,37 @@ export default {
         R.concat([emptyItem]),
         R.map(cityToCityOption),
       )(this.citiesWithConnections);
+    },
+
+    destOptions() {
+      let origin = this.origin.value;
+
+      // TODO FPish
+      if (origin) {
+        let emptyItem = { text: '', value: '', };
+
+        // TODO extract
+        let originConnections = R.compose(
+          R.pluck('iata'),
+          R.flatten(),
+          R.pluck('connections'),
+          R.filter(
+            R.propEq('iata', origin)),
+          )(this.citiesWithConnections);
+
+        return R.compose(
+          R.concat([emptyItem]),
+          R.map(cityToCityOption),
+          R.filter(city => R.contains(city.iata, originConnections))
+        )(this.citiesWithConnections);
+
+      } else {
+        return [{ text: '', value: '' }];
+      }
+    },
+
+    destDisabled() {
+      return !this.origin.value;
     },
   },
 

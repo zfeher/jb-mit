@@ -3,7 +3,9 @@
     <SearchPanel
       id="search-panel"
       @selectOrigin="selectOrigin($event)"
+      @selectDestination="selectDestination($event)"
       :origin="origin"
+      :destination="destination"
     />
 
     </br>
@@ -32,9 +34,9 @@ export default {
     };
   },
 
-  computed: mapState(['origin']),
+  computed: mapState(['origin', 'destination']),
 
-  methods: mapMutations(['selectOrigin']),
+  methods: mapMutations(['selectOrigin', 'selectDestination']),
 };
 </script>
 
