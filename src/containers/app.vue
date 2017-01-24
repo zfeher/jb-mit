@@ -4,8 +4,10 @@
       id="search-panel"
       @selectOrigin="selectOrigin($event)"
       @selectDestination="selectDestination($event)"
+      @selectDepartureDate="selectDepartureDate($event)"
       :origin="origin"
       :destination="destination"
+      :departureDate="departureDate"
     />
 
     </br>
@@ -34,9 +36,9 @@ export default {
     };
   },
 
-  computed: mapState(['origin', 'destination']),
+  computed: mapState(['origin', 'destination', 'departureDate']),
 
-  methods: mapMutations(['selectOrigin', 'selectDestination']),
+  methods: mapMutations(['selectOrigin', 'selectDestination', 'selectDepartureDate']),
 };
 </script>
 

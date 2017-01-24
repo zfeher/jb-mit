@@ -23,12 +23,24 @@
       <ErrorMessage v-if="destination.error" :message="destination.error" />
     </div>
 
+    <div :style="rowStyle">
+      <Labell text="Departure Date" />
+      <DatePicker
+        id="departure-date"
+        @select="$emit('selectDepartureDate', $event)"
+        :min="departureDate.min"
+        :max="departureDate.max"
+        :selected="departureDate.value"
+      />
+      <ErrorMessage v-if="departureDate.error" :message="departureDate.error" />
+    </div>
+
   </div>
 </template>
 
 <script>
 import * as R from 'ramda';
-import { ComboBox, ErrorMessage, Labell } from '../components';
+import { ComboBox, DatePicker, ErrorMessage, Labell } from '../components';
 import { getCitiesWithConnections } from '../services';
 
 let cityToCityOption = city => ({
@@ -41,6 +53,7 @@ export default {
 
   components: {
     ComboBox,
+    DatePicker,
     ErrorMessage,
     Labell,
   },
@@ -67,6 +80,18 @@ export default {
         return {
           disabled: false,
           value: '',
+          error: '',
+        };
+      },
+    },
+
+    departureDate: {
+      type: Object,
+      default() {
+        return {
+          value: '',
+          min: '',
+          max: '',
           error: '',
         };
       },
