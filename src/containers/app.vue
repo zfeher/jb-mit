@@ -5,9 +5,11 @@
       @selectOrigin="selectOrigin($event)"
       @selectDestination="selectDestination($event)"
       @selectDepartureDate="selectDepartureDate($event)"
+      @selectReturnDate="selectReturnDate($event)"
       :origin="origin"
       :destination="destination"
       :departureDate="departureDate"
+      :returnDate="returnDate"
     />
 
     </br>
@@ -36,9 +38,9 @@ export default {
     };
   },
 
-  computed: mapState(['origin', 'destination', 'departureDate']),
+  computed: mapState(['origin', 'destination', 'departureDate', 'returnDate']),
 
-  methods: mapMutations(['selectOrigin', 'selectDestination', 'selectDepartureDate']),
+  methods: mapMutations(['selectOrigin', 'selectDestination', 'selectDepartureDate', 'selectReturnDate']),
 };
 </script>
 

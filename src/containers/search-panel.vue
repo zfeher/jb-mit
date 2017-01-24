@@ -35,6 +35,18 @@
       <ErrorMessage v-if="departureDate.error" :message="departureDate.error" />
     </div>
 
+    <div :style="rowStyle">
+      <Labell text="Return Date" />
+      <DatePicker
+        id="return-date"
+        @select="$emit('selectReturnDate', $event)"
+        :min="returnDate.min"
+        :max="returnDate.max"
+        :selected="returnDate.value"
+      />
+      <ErrorMessage v-if="returnDate.error" :message="returnDate.error" />
+    </div>
+
   </div>
 </template>
 
@@ -86,6 +98,18 @@ export default {
     },
 
     departureDate: {
+      type: Object,
+      default() {
+        return {
+          value: '',
+          min: '',
+          max: '',
+          error: '',
+        };
+      },
+    },
+
+    returnDate: {
       type: Object,
       default() {
         return {
