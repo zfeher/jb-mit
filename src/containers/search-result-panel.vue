@@ -14,34 +14,38 @@
         />
     </div>
 
-    <div :style="rowStyle">
-      <Labell text="Return Date" />
-    </div>
+    <template v-if="showReturnDatePicker">
+      <div :style="rowStyle">
+        <Labell text="Return Date" />
+      </div>
 
-    <div :style="rowStyle">
-      <DatePicker
-        id="return-date-after"
-        @select="$emit('selectReturnDate', $event)"
-        :min="returnDate.min"
-        :max="returnDate.max"
-        :selected="returnDate.value"
-      />
-      <ErrorMessage v-if="returnDate.error" :message="returnDate.error" />
-    </div>
+      <div :style="rowStyle">
+        <DatePicker
+          id="return-date-after"
+          @select="$emit('selectReturnDate', $event)"
+          :min="returnDate.min"
+          :max="returnDate.max"
+          :selected="returnDate.value"
+        />
+        <ErrorMessage v-if="returnDate.error" :message="returnDate.error" />
+      </div>
+    </template>
 
-    <div :style="rowStyle">
-      <Labell :text="retFlightLabel" width="230px" />
-    </div>
+    <template v-if="showReturnFlights" >
+      <div :style="rowStyle">
+        <Labell :text="retFlightLabel" width="230px" />
+      </div>
 
-    <div :style="rowStyle">
-      <ListBox
-        id="return-flight"
-        @select="$emit('selectReturnFlight', $event)"
-        :options="retFlightOptions"
-        :selectedValue="returnFlight"
-        width="230px"
-      />
-    </div>
+      <div :style="rowStyle">
+        <ListBox
+          id="return-flight"
+          @select="$emit('selectReturnFlight', $event)"
+          :options="retFlightOptions"
+          :selectedValue="returnFlight"
+          width="230px"
+        />
+      </div>
+    </template>
 
     <div :style="rowStyle">
       <button @click="$emit('startOverClick')">Start Over</button>
@@ -160,6 +164,29 @@ export default {
     retFlightOptions() {
       return R.map(flightToFlightOption, this.returnFlights);
     },
+
+    showReturnDatePicker() {
+      // TODO bit harder because it depends on the initial return date
+      //  later the same value will be changed ...
+
+      // return R.isEmpty(this.initReturnDate);
+
+      // TODO also selecting a return date should trigger validation + search as well
+      //  this is tricky too or maybe not
+      //  we need to emit multiple events selectReturnDate + triggerSearchReturnFlights !
+
+      return true;
+    },
+
+    showReturnFlights() {
+      // TODO bit harder because it depends on the initial return date plus the
+      //  local state
+
+      // return isNotEmpty(this.returnDate.value);
+
+      return true;
+    },
+
   },
 
   methods: {
