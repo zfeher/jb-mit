@@ -8,7 +8,7 @@ module.exports = {
     "sourceType": "module",
     "ecmaFeatures": {
       "impliedStrict ": true,
-      "experimentalObjectRestSpread ": true,
+      "experimentalObjectRestSpread": true,
     }
   },
   'extends': 'eslint:recommended',
