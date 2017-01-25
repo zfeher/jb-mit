@@ -9,7 +9,6 @@ import { searchFlights } from '../services';
 Vue.use(Vuex);
 
 let __ = R.__;
-let alwaysEmptyStr = R.always('');
 
 let validateOrigin = validate([checkNotEmpty('origin')]);
 let validateDestination = validate([checkNotEmpty('destination')]);
