@@ -8,7 +8,7 @@
         :options="originOptions"
         :selectedValue="origin.value"
       />
-      <ErrorMessage v-if="true" :message="origin.error" />
+      <ErrorMessage v-if="origin.error" :message="origin.error" />
     </div>
 
     <div :style="rowStyle">
@@ -20,7 +20,7 @@
         :selectedValue="destination.value"
         :disabled="destDisabled"
       />
-      <ErrorMessage v-if="true" :message="destination.error" />
+      <ErrorMessage v-if="destination.error" :message="destination.error" />
     </div>
 
     <div :style="rowStyle">
@@ -32,7 +32,7 @@
         :max="departureDate.max"
         :selected="departureDate.value"
       />
-      <ErrorMessage v-if="true" :message="departureDate.error" />
+      <ErrorMessage v-if="departureDate.error" :message="departureDate.error" />
     </div>
 
     <div :style="rowStyle">
@@ -44,7 +44,7 @@
         :max="returnDate.max"
         :selected="returnDate.value"
       />
-      <ErrorMessage v-if="true" :message="returnDate.error" />
+      <ErrorMessage v-if="returnDate.error" :message="returnDate.error" />
     </div>
 
     <div :style="rowStyle">

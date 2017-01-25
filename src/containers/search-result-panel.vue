@@ -27,7 +27,7 @@
           :max="returnDate.max"
           :selected="returnDate.value"
         />
-        <ErrorMessage v-if="true" :message="returnDate.error" />
+        <ErrorMessage v-if="returnDate.error" :message="returnDate.error" />
       </div>
     </template>
 
